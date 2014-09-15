@@ -1,36 +1,36 @@
 package vovkab.tagged.twitter;
 
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuItem;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
+import android.support.v7.app.ActionBarActivity;
 
+import vovkab.tagged.twitter.fragment.AuthFragment;
 
 public class MainActivity extends ActionBarActivity {
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    @Override protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-    }
 
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.main, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-        if (id == R.id.action_settings) {
-            return true;
+        if (savedInstanceState == null) {
+            showFragment(AuthFragment.class, null);
         }
-        return super.onOptionsItemSelected(item);
     }
+
+    public void showFragment(Class fragmentClass, Bundle args) {
+        showFragment(fragmentClass.getName(), args);
+    }
+
+    public void showFragment(String fragmentName, Bundle args) {
+        FragmentManager fm = getSupportFragmentManager();
+
+        // Replace what ever we have with a new fragment
+        FragmentTransaction ft = fm.beginTransaction();
+        Fragment fragment = Fragment.instantiate(this, fragmentName, args);
+        ft.replace(R.id.container, fragment);
+        ft.commit();
+    }
+
 }
