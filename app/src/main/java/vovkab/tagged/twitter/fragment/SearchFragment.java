@@ -15,11 +15,10 @@ import retrofit.RetrofitError;
 import retrofit.client.Response;
 import vovkab.tagged.twitter.R;
 import vovkab.tagged.twitter.TaggedApp;
-import vovkab.tagged.twitter.adapter.AdapterBase;
+import vovkab.tagged.twitter.adapter.TweetsAdapter;
 import vovkab.tagged.twitter.api.TwitterClient;
-import vovkab.tagged.twitter.api.model.Tweet;
 import vovkab.tagged.twitter.api.response.TweetsResponse;
-import vovkab.tagged.twitter.view.TweetView;
+import vovkab.tagged.twitter.utils.Utils;
 
 public class SearchFragment extends LoadingFragment {
 
@@ -50,6 +49,7 @@ public class SearchFragment extends LoadingFragment {
         mSearchButton = view.findViewById(R.id.search);
         mSearchButton.setOnClickListener(new View.OnClickListener() {
             @Override public void onClick(View v) {
+                Utils.hideKeyboard(v);
                 mTwitter.search(mSearchView.getText().toString(), new Callback<TweetsResponse>() {
                     @Override
                     public void success(TweetsResponse tweetsResponse, Response response) {
@@ -67,14 +67,4 @@ public class SearchFragment extends LoadingFragment {
         mListView.setAdapter(mAdapter);
     }
 
-    class TweetsAdapter extends AdapterBase<Tweet, TweetView> {
-
-        @Override public TweetView createView(LayoutInflater inflater, ViewGroup parent) {
-            return new TweetView(inflater.getContext());
-        }
-
-        @Override public void bindView(int position, TweetView view, Tweet data) {
-            view.setText(data.text);
-        }
-    }
 }

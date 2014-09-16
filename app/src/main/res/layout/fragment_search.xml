@@ -16,7 +16,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:hint="@string/twitter_search_hint"
-            android:maxLines="1"
+            android:singleLine="true"
             />
 
         <Button
