@@ -6,5 +6,7 @@
     <string name="action_settings">Settings</string>
     <string name="twitter_search">Search</string>
     <string name="twitter_search_hint">Enter text to search</string>
+    <string name="twitter_search_empty">Search Twitter</string>
+    <string name="search_cant_load_tweets">Sorry, we can\'t load tweets.</string>
 
 </resources>

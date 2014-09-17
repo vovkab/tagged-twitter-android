@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 
@@ -31,6 +32,7 @@ public class SearchFragment extends LoadingFragment {
     private View mSearchButton;
 
     private ListView mListView;
+    private TextView mEmptyView;
     private TweetsAdapter mAdapter;
     private ArrayList<Tweet> mData = new ArrayList<Tweet>();
 
@@ -63,13 +65,15 @@ public class SearchFragment extends LoadingFragment {
                     }
 
                     @Override public void failure(RetrofitError error) {
-                        showToast("Sorry, we can't load tweets.");
+                        showToast(R.string.search_cant_load_tweets);
                     }
                 });
             }
         });
 
+        mEmptyView = (TextView) view.findViewById(R.id.empty_view);
         mListView = (ListView) view.findViewById(R.id.listview);
+        mListView.setEmptyView(mEmptyView);
         mListView.setAdapter(mAdapter);
 
         if (savedInstanceState != null) {
