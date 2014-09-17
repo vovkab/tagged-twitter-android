@@ -75,14 +75,19 @@ public class SearchFragment extends LoadingFragment {
         mListView = (ListView) view.findViewById(R.id.listview);
         mListView.setEmptyView(mEmptyView);
         mListView.setAdapter(mAdapter);
+    }
 
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
         if (savedInstanceState != null) {
             mData = savedInstanceState.getParcelableArrayList(SAVED_DATA);
             mAdapter.setData(mData);
         }
     }
 
-    @Override public void onSaveInstanceState(Bundle outState) {
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putParcelableArrayList(SAVED_DATA, mData);
     }
