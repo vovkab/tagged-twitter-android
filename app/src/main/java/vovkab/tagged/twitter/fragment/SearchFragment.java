@@ -8,6 +8,8 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ListView;
 
+import java.util.ArrayList;
+
 import javax.inject.Inject;
 
 import retrofit.Callback;
@@ -17,11 +19,12 @@ import vovkab.tagged.twitter.R;
 import vovkab.tagged.twitter.TaggedApp;
 import vovkab.tagged.twitter.adapter.TweetsAdapter;
 import vovkab.tagged.twitter.api.TwitterClient;
+import vovkab.tagged.twitter.api.model.Tweet;
 import vovkab.tagged.twitter.api.response.TweetsResponse;
 import vovkab.tagged.twitter.utils.Utils;
 
 public class SearchFragment extends LoadingFragment {
-
+    private static final String SAVED_DATA = "saved_data";
     @Inject TwitterClient mTwitter;
 
     private EditText mSearchView;
@@ -29,6 +32,7 @@ public class SearchFragment extends LoadingFragment {
 
     private ListView mListView;
     private TweetsAdapter mAdapter;
+    private ArrayList<Tweet> mData = new ArrayList<Tweet>();
 
     @Override public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -53,7 +57,9 @@ public class SearchFragment extends LoadingFragment {
                 mTwitter.search(mSearchView.getText().toString(), new Callback<TweetsResponse>() {
                     @Override
                     public void success(TweetsResponse tweetsResponse, Response response) {
-                        mAdapter.setData(tweetsResponse.tweets);
+                        mData.clear();
+                        mData.addAll(tweetsResponse.tweets);
+                        mAdapter.setData(mData);
                     }
 
                     @Override public void failure(RetrofitError error) {
@@ -65,6 +71,15 @@ public class SearchFragment extends LoadingFragment {
 
         mListView = (ListView) view.findViewById(R.id.listview);
         mListView.setAdapter(mAdapter);
+
+        if (savedInstanceState != null) {
+            mData = savedInstanceState.getParcelableArrayList(SAVED_DATA);
+            mAdapter.setData(mData);
+        }
     }
 
+    @Override public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putParcelableArrayList(SAVED_DATA, mData);
+    }
 }
