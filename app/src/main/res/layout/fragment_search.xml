@@ -19,12 +19,24 @@
             android:singleLine="true"
             />
 
-        <Button
-            android:id="@+id/search"
+        <FrameLayout
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/twitter_search"
-            />
+            android:layout_height="match_parent">
+
+            <Button
+                android:id="@+id/search"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/twitter_search"
+                />
+
+            <ProgressBar
+                android:id="@+id/search_progress"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_gravity="center"
+                />
+        </FrameLayout>
     </LinearLayout>
 
     <FrameLayout

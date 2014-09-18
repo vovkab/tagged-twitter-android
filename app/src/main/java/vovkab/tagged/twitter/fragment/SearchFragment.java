@@ -35,6 +35,7 @@ public class SearchFragment extends LoadingFragment {
 
     private EditText mSearchView;
     private View mSearchButton;
+    private View mSearchProgress;
 
     private ListView mListView;
     private TextView mEmptyView;
@@ -67,6 +68,8 @@ public class SearchFragment extends LoadingFragment {
         super.onViewCreated(view, savedInstanceState);
 
         mSearchView = (EditText) view.findViewById(R.id.search_view);
+        mSearchProgress = view.findViewById(R.id.search_progress);
+        mSearchProgress.setVisibility(View.GONE);
         mSearchButton = view.findViewById(R.id.search);
         mSearchButton.setOnClickListener(new View.OnClickListener() {
             @Override public void onClick(View v) {
@@ -89,20 +92,21 @@ public class SearchFragment extends LoadingFragment {
         RxLoaderManager rxLoaderManager = RxLoaderManagerCompat.get(getActivity());
         mSearchLoader = rxLoaderManager.create(input, new RxLoaderObserver<ArrayList<Tweet>>() {
             @Override public void onStarted() {
-                mSearchButton.setEnabled(false);
+                showSearching();
             }
 
             @Override public void onNext(ArrayList<Tweet> value) {
+                System.out.println("onNext: " + value.size());
                 mAdapter.setData(value);
-                mSearchButton.setEnabled(true);
+                searchFinished();
                 if (value.size() == 0) {
                     mEmptyView.setText(R.string.search_no_tweets_found);
                 }
             }
 
             @Override public void onError(Throwable e) {
-                showToast(R.string.search_cant_load_tweets);
-                mSearchButton.setEnabled(true);
+                mEmptyView.setText(R.string.search_cant_load_tweets);
+                searchFinished();
             }
         }).save(new SaveCallback<ArrayList<Tweet>>() {
             @Override public void onSave(String key, ArrayList<Tweet> value, Bundle outState) {
@@ -113,6 +117,16 @@ public class SearchFragment extends LoadingFragment {
                 return savedState.getParcelableArrayList(key + SAVED_DATA);
             }
         });
+    }
+
+    private void showSearching() {
+        mSearchButton.setEnabled(false);
+        mSearchProgress.setVisibility(View.VISIBLE);
+    }
+
+    private void searchFinished() {
+        mSearchButton.setEnabled(true);
+        mSearchProgress.setVisibility(View.GONE);
     }
 
 }
