@@ -2,6 +2,7 @@ package vovkab.tagged.twitter.view;
 
 import android.content.Context;
 import android.text.TextUtils;
+import android.text.util.Linkify;
 import android.util.AttributeSet;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -35,6 +36,7 @@ public class TweetView extends FrameLayout {
         inflate(getContext(), R.layout.view_tweet, this);
 
         mTextView = (TextView) findViewById(R.id.tweet_text);
+        mTextView.setAutoLinkMask(Linkify.WEB_URLS);
         mUserNameView = (TextView) findViewById(R.id.user_name);
         mUserImageView = (ImageView) findViewById(R.id.user_image);
     }
