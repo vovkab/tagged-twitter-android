@@ -2,6 +2,7 @@ package vovkab.tagged.twitter.fragment;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -74,9 +75,14 @@ public class SearchFragment extends LoadingFragment {
         mSearchButton = view.findViewById(R.id.search);
         mSearchButton.setOnClickListener(new View.OnClickListener() {
             @Override public void onClick(View v) {
-                v.clearFocus();
-                Utils.hideKeyboard(v);
-                mSearchLoader.restart(ViewUtils.getString(mSearchView));
+                String search = ViewUtils.getString(mSearchView);
+                if (TextUtils.isEmpty(search)) {
+                    showToast(R.string.query_params_missing);
+                } else {
+                    Utils.hideKeyboard(v);
+                    v.clearFocus();
+                    mSearchLoader.restart(search);
+                }
             }
         });
 

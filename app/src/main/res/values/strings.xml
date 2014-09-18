@@ -10,5 +10,6 @@
     <string name="search_no_tweets_found">Sorry, we can\'t find any tweets.</string>
     <string name="network_error">No Internet connection.\nPlease check your Internet connection and try again.</string>
     <string name="searching_tweets">Searching…</string>
+    <string name="query_params_missing">Please type something in search field, so we can search for it!</string>
 
 </resources>
