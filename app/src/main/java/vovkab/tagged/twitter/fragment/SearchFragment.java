@@ -18,6 +18,7 @@ import me.tatarka.rxloader.RxLoaderManager;
 import me.tatarka.rxloader.RxLoaderManagerCompat;
 import me.tatarka.rxloader.RxLoaderObserver;
 import me.tatarka.rxloader.SaveCallback;
+import retrofit.RetrofitError;
 import rx.Observable;
 import rx.functions.Func1;
 import vovkab.tagged.twitter.R;
@@ -92,11 +93,12 @@ public class SearchFragment extends LoadingFragment {
         RxLoaderManager rxLoaderManager = RxLoaderManagerCompat.get(getActivity());
         mSearchLoader = rxLoaderManager.create(input, new RxLoaderObserver<ArrayList<Tweet>>() {
             @Override public void onStarted() {
-                showSearching();
+                mSearchButton.setEnabled(false);
+                mSearchProgress.setVisibility(View.VISIBLE);
+                mEmptyView.setText(R.string.searching_tweets);
             }
 
             @Override public void onNext(ArrayList<Tweet> value) {
-                System.out.println("onNext: " + value.size());
                 mAdapter.setData(value);
                 searchFinished();
                 if (value.size() == 0) {
@@ -105,7 +107,18 @@ public class SearchFragment extends LoadingFragment {
             }
 
             @Override public void onError(Throwable e) {
-                mEmptyView.setText(R.string.search_cant_load_tweets);
+                int errorResId = R.string.search_cant_load_tweets;
+                if (e instanceof RetrofitError) {
+                    RetrofitError retrofitError = (RetrofitError) e;
+                    if (retrofitError.isNetworkError()) {
+                        errorResId = R.string.network_error;
+                    }
+                }
+                if (mAdapter.getCount() > 0) {
+                    showToast(errorResId);
+                } else {
+                    mEmptyView.setText(errorResId);
+                }
                 searchFinished();
             }
         }).save(new SaveCallback<ArrayList<Tweet>>() {
@@ -117,11 +130,6 @@ public class SearchFragment extends LoadingFragment {
                 return savedState.getParcelableArrayList(key + SAVED_DATA);
             }
         });
-    }
-
-    private void showSearching() {
-        mSearchButton.setEnabled(false);
-        mSearchProgress.setVisibility(View.VISIBLE);
     }
 
     private void searchFinished() {

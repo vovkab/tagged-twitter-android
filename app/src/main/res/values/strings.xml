@@ -8,5 +8,7 @@
     <string name="twitter_search_empty">Search Twitter</string>
     <string name="search_cant_load_tweets">Sorry, we can\'t load tweets.</string>
     <string name="search_no_tweets_found">Sorry, we can\'t find any tweets.</string>
+    <string name="network_error">No Internet connection.\nPlease check your Internet connection and try again.</string>
+    <string name="searching_tweets">Searching…</string>
 
 </resources>
