@@ -7,6 +7,7 @@ import retrofit.http.Header;
 import retrofit.http.POST;
 import retrofit.http.Query;
 import retrofit.mime.TypedInput;
+import rx.Observable;
 import vovkab.tagged.twitter.api.response.Oauth2TokenResponse;
 import vovkab.tagged.twitter.api.response.TweetsResponse;
 
@@ -26,4 +27,7 @@ public interface TwitterClient {
 
     @GET("/1.1/search/tweets.json")
     public void search(@Query("q") String query, Callback<TweetsResponse> callback);
+
+    @GET("/1.1/search/tweets.json")
+    public Observable<TweetsResponse> search(@Query("q") String query);
 }

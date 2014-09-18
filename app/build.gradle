@@ -48,4 +48,6 @@ dependencies {
 
     compile 'com.netflix.rxjava:rxjava-core:0.20.4'
     compile 'com.netflix.rxjava:rxjava-android:0.20.4'
+
+    compile 'me.tatarka.rxloader:rxloader:1.0'
 }
