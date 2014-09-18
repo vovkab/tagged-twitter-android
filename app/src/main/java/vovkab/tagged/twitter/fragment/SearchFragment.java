@@ -25,7 +25,6 @@ import vovkab.tagged.twitter.TaggedApp;
 import vovkab.tagged.twitter.adapter.TweetsAdapter;
 import vovkab.tagged.twitter.api.TwitterClient;
 import vovkab.tagged.twitter.api.model.Tweet;
-import vovkab.tagged.twitter.api.response.TweetsResponse;
 import vovkab.tagged.twitter.utils.Utils;
 import vovkab.tagged.twitter.utils.ViewUtils;
 
@@ -50,11 +49,7 @@ public class SearchFragment extends LoadingFragment {
 
     private Func1<String, Observable<ArrayList<Tweet>>> input = new Func1<String, Observable<ArrayList<Tweet>>>() {
         @Override public Observable<ArrayList<Tweet>> call(String s) {
-            return mTwitter.search(s).flatMap(new Func1<TweetsResponse, Observable<ArrayList<Tweet>>>() {
-                @Override public Observable<ArrayList<Tweet>> call(TweetsResponse tweetsResponse) {
-                    return Observable.just(tweetsResponse.tweets);
-                }
-            });
+            return mTwitter.search(s).flatMap(tweetsResponse -> Observable.just(tweetsResponse.tweets));
         }
     };
 
@@ -71,12 +66,10 @@ public class SearchFragment extends LoadingFragment {
         mSearchProgress = view.findViewById(R.id.search_progress);
         mSearchProgress.setVisibility(View.GONE);
         mSearchButton = view.findViewById(R.id.search);
-        mSearchButton.setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View v) {
-                v.clearFocus();
-                Utils.hideKeyboard(v);
-                mSearchLoader.restart(ViewUtils.getString(mSearchView));
-            }
+        mSearchButton.setOnClickListener(v -> {
+            v.clearFocus();
+            Utils.hideKeyboard(v);
+            mSearchLoader.restart(ViewUtils.getString(mSearchView));
         });
 
         mEmptyView = (TextView) view.findViewById(R.id.empty_view);
@@ -96,7 +89,6 @@ public class SearchFragment extends LoadingFragment {
             }
 
             @Override public void onNext(ArrayList<Tweet> value) {
-                System.out.println("onNext: " + value.size());
                 mAdapter.setData(value);
                 searchFinished();
                 if (value.size() == 0) {

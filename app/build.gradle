@@ -1,4 +1,9 @@
+repositories {
+    mavenCentral()
+}
+
 apply plugin: 'com.android.application'
+apply plugin: 'retrolambda'
 
 android {
     compileSdkVersion 20
@@ -21,7 +26,11 @@ android {
     packagingOptions {
         exclude 'META-INF/LICENSE'
         exclude 'META-INF/NOTICE'
+    }
 
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
     }
 }
 
